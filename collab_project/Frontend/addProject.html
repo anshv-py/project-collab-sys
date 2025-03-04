@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Project</title>
+    <link rel="stylesheet" href="css/addProject.css">
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">ProjectManager</div>
+        <ul class="nav-links">
+            <li class="normal-link"><a href="index.html#home">Home</a></li>
+            <li class="normal-link"><a href="index.html#about">About</a></li>
+            <li class="normal-link"><a href="index.html#services">Services</a></li>
+            <li class="normal-link"><a href="index.html#works">How It Works</a></li>
+            <div class="contact-link"><li><a href="index.html#contact" class="contact">Contact</a></li></div>
+            
+            <!-- Profile Dropdown -->
+            <div class="profile-container">
+                <div class="profile-icon" id="profileBtn">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="signin.html" class="dropdown-item logout">Logout</a>
+                </div>
+            </div>
+        </ul>
+    </nav>
+
+
+    <div>
+        <!-- Form Container -->
+        <div class="form-container">
+            <h1>Add New Project</h1>
+            <div class="form-card">
+                <form id="addProjectForm">
+                    <label for="title">Project Title:</label>
+                    <input type="text" id="title" required>
+
+                    <label for="description">Description:</label>
+                    <textarea id="description" required></textarea>
+
+                    <label for="field">Project Field:</label>
+                    <input type="text" id="field" required>
+
+                    <label for="image">Upload Image:</label>
+                    <input type="file" id="image" accept="image/*">
+
+                    <div class="button-group">
+                        <button type="submit" class="submit-btn">Add Project</button>
+                        <button type="button" class="close-btn" onclick="closeForm()">Close</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    
+
+    <script src="js/addProject.js"></script>
+</body>
+</html>
