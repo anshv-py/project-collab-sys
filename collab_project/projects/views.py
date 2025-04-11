@@ -21,11 +21,13 @@ def signin(request):
     return render(request, 'signin.html')
 
 def firstscreen(request):
-    return render(request, 'index2.html')
+    return render(request, 'loggedin.html')
 
-def dashboard(request):
-    return render(request, 'faculty-projects.html')
+def student_dashboard(request):
+    return render(request, 'student_dashboard.html')
 
-def logout_view(request):
-    logout(request)
-    return redirect('login.html')
+def faculty_dashboard(request):
+    return render(request, 'faculty_dashboard.html')
+
+def profile_page(request):
+    return render(request, 'profile.html')

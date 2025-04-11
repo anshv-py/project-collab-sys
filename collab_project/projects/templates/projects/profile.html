@@ -1,0 +1,195 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Modern Profile Page</title>
+    <link rel="stylesheet" href="{% static 'projects/css/profile.css' %}">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <script defer src="{% static 'projects/js/profile.js' %}"></script>
+</head>
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="logo">ProjectManager</div>
+        <ul class="nav-links">
+            <li class="normal-link"><a href="/home/#home">Home</a></li>
+            <li class="normal-link"><a href="/home/#about">About</a></li>
+            <li class="normal-link"><a href="/home/#services">Services</a></li>
+            <li class="normal-link"><a href="/home/#works">How It Works</a></li>
+            <div class="contact-link"><li><a href="/home/#contact" class="contact">Contact</a></li></div>
+        </ul>
+    </nav>
+    
+    <div class="profile-container">
+        <div class="profile-header">
+            <div class="profile-image-container">
+                <input type="file" id="profileImageUpload" class="profile-image-upload" accept="image/*">
+                <label for="profileImageUpload" class="profile-image-label">
+                    <img id="profileImagePreview" src="#" alt="Profile Preview" style="display:none;">
+                    <div class="camera-icon">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                </label>
+            </div>
+            <h1 id="profileName" class="profile-name">John Doe</h1>
+            <button id="editProfile" class="edit-btn">Edit Profile</button>
+        </div>
+
+        <div class="profile-details">
+            <div class="detail-item">
+                <strong>Full Name:</strong> 
+                <span id="nameOutput">John Doe</span>
+            </div>
+            <div class="detail-item">
+                <strong>Email:</strong> 
+                <span id="emailOutput">john.doe@example.com</span>
+            </div>
+            <div class="detail-item">
+                <strong>Phone:</strong> 
+                <span id="phoneOutput">+1 (555) 123-4567</span>
+            </div>
+            <div class="detail-item">
+                <strong>Mobile:</strong> 
+                <span id="mobileOutput">+1 (555) 987-6543</span>
+            </div>
+            <div class="detail-item">
+                <strong>Address:</strong> 
+                <span id="addressOutput">123 Main St, Anytown, USA</span>
+            </div>
+        </div>
+
+        <div class="project-contributions-section">
+            <h2>Project Contributions</h2>
+            <div class="contributions-grid">
+                <div class="contribution-card">
+                    <div class="contribution-icon">
+                        <i class="fas fa-code-branch"></i>
+                    </div>
+                    <div class="contribution-details">
+                        <h3 id="totalProjects">0</h3>
+                        <p>Total Projects</p>
+                    </div>
+                </div>
+                <div class="contribution-card">
+                    <div class="contribution-icon">
+                        <i class="fas fa-laptop-code"></i>
+                    </div>
+                    <div class="contribution-details">
+                        <h3 id="openSourceProjects">0</h3>
+                        <p>Open Source Contributions</p>
+                    </div>
+                </div>
+                <div class="contribution-card">
+                    <div class="contribution-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="contribution-details">
+                        <h3 id="commitCount">0</h3>
+                        <p>Total Commits</p>
+                    </div>
+                </div>
+                <div class="contribution-card">
+                    <div class="contribution-icon">
+                        <i class="fas fa-users"></i>
+                    </div>
+                    <div class="contribution-details">
+                        <h3 id="collaboratorCount">0</h3>
+                        <p>Collaborators Worked With</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contribution Breakdown Chart -->
+            <div class="contribution-breakdown">
+                <h3>Contribution Breakdown</h3>
+                <div class="contribution-progress">
+                    <div class="progress-label">Web Development</div>
+                    <div class="progress-bar">
+                        <div class="progress web-dev" style="width: 65%;">65%</div>
+                    </div>
+                </div>
+                <div class="contribution-progress">
+                    <div class="progress-label">Mobile Development</div>
+                    <div class="progress-bar">
+                        <div class="progress mobile-dev" style="width: 25%;">25%</div>
+                    </div>
+                </div>
+                <div class="contribution-progress">
+                    <div class="progress-label">Machine Learning</div>
+                    <div class="progress-bar">
+                        <div class="progress ml-dev" style="width: 10%;">10%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <br>
+
+        <div class="social-section">
+            <h2>Social Media Connections</h2>
+            <div class="social-progress-container">
+                <div class="social-progress-item">
+                    <div class="social-icon github">
+                        <i class="fab fa-github"></i>
+                    </div>
+                    <!-- <div class="progress-bar">
+                        <div class="progress" style="width: 75%;"></div>
+                    </div> -->
+                    <a href="#" id="githubLink" class="social-link">GitHub Profile</a>
+                </div>
+
+                <div class="social-progress-item">
+                    <div class="social-icon twitter">
+                        <i class="fab fa-twitter"></i>
+                    </div>
+                    <!-- <div class="progress-bar">
+                        <div class="progress" style="width: 60%;"></div>
+                    </div> -->
+                    <a href="#" id="twitterLink" class="social-link">Twitter Profile</a>
+                </div>
+
+                <div class="social-progress-item">
+                    <div class="social-icon linkedin">
+                        <i class="fab fa-linkedin"></i>
+                    </div>
+                    <!-- <div class="progress-bar">
+                        <div class="progress" style="width: 85%;"></div>
+                    </div> -->
+                    <a href="#" id="linkedinLink" class="social-link">LinkedIn Profile</a>
+                </div>
+
+                <div class="social-progress-item">
+                    <div class="social-icon instagram">
+                        <i class="fab fa-instagram"></i>
+                    </div>
+                    <!-- <div class="progress-bar">
+                        <div class="progress" style="width: 45%;"></div>
+                    </div> -->
+                    <a href="#" id="instagramLink" class="social-link">Instagram Profile</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit Profile Modal -->
+    <div id="editProfileModal" class="modal">
+        <div class="modal-content">
+            <span class="close-btn">&times;</span>
+            <h2>Edit Profile</h2>
+            <form id="profileForm">
+                <input type="text" id="fullName" placeholder="Full Name">
+                <input type="email" id="email" placeholder="Email" required>
+                <input type="tel" id="mobile" placeholder="Mobile">
+                <input type="text" id="address" placeholder="Address">
+                <input type="text" id="githubProfile" placeholder="GitHub Profile URL">
+                <input type="text" id="twitterProfile" placeholder="Twitter Profile URL">
+                <input type="text" id="linkedinProfile" placeholder="LinkedIn Profile URL">
+                <input type="text" id="instagramProfile" placeholder="Instagram Profile URL">
+                <button type="submit">Save Profile</button>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

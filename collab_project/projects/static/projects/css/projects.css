@@ -45,28 +45,6 @@
         margin: 0 20px;
     }
 
-    /* Normal Links */
-    .nav-links .normal-link a {
-        color: #333;
-        text-decoration: none;
-        font-size: 15px;
-        font-weight: 600;
-        transition: color 0.3s ease;
-        position: relative;
-    }
-
-    /* Underline Animation */
-    .nav-links .normal-link a::after {
-        content: "";
-        position: absolute;
-        width: 0%;
-        height: 2px;
-        bottom: -5px;
-        left: 0;
-        background-color: #28a745;
-        transition: width 0.4s ease-in-out;
-    }
-
     /* Hover Effects */
     .nav-links a:hover::after {
         width: 100%;

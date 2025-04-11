@@ -59,20 +59,56 @@ function setupProfileDropdown() {
 
 // Function to open project details modal with title, description, and optional image
 function openProjectDetails(title, description, imageUrl) {
+    console.log("Opening project modal..."); // Debugging
+
     const modal = document.getElementById("projectModal");
     document.getElementById("modalProjectTitle").innerText = title;
     document.getElementById("modalProjectDescription").innerText = description;
     
     const imageElement = document.getElementById("modalProjectImage");
-    if (imageUrl) {
+
+    if (imageUrl && imageUrl.trim() !== "") {
+        console.log("Setting image source:", imageUrl); // Debugging
         imageElement.src = imageUrl;
         imageElement.style.display = "block"; // Show image if available
     } else {
+        console.log("No image provided, hiding image element"); // Debugging
         imageElement.style.display = "none"; // Hide image if no URL is provided
     }
 
     modal.style.display = "flex";
 }
+
+// Ensure DOM is fully loaded before attaching event listener
+document.addEventListener("DOMContentLoaded", function () {
+    console.log("DOM fully loaded, setting up event listeners");
+
+    document.addEventListener("click", function (event) {
+        const button = event.target.closest(".learn-more"); // Ensure the click is on the button
+
+        if (!button) {
+            console.log("Click detected, but not on 'Learn More' button");
+            return;
+        }
+
+        console.log("'Learn More' button clicked!", button);
+
+        const card = button.closest(".project-card"); // Find the parent project card
+        if (!card) {
+            console.error("No project card found for this button");
+            return;
+        }
+
+        const title = card.getAttribute("data-title");
+        const description = card.getAttribute("data-description");
+        const imageUrl = card.getAttribute("data-image");
+
+        console.log("Opening modal with:", title, description, imageUrl);
+        openProjectDetails(title, description, imageUrl);
+    });
+});
+
+
 
 // Function to close the project details modal
 function closeProjectModal() {

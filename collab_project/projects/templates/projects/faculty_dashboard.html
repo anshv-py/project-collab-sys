@@ -1,0 +1,114 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Faculty Dashboard</title>
+
+    <link rel="stylesheet" href="{% static 'projects/css/projects.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'projects/css/style.css' %}">
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+</head>
+<script src="{% static 'projects/images/index.js' %}"></script>
+<script src="{% static 'projects/images/addProject.js' %}"></script>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="logo">ProjectManager</div>
+        <ul class="nav-links">
+            <li class="normal-link"><a href="/home/#home">Home</a></li>
+            <li class="normal-link"><a href="/home/#about">About</a></li>
+            <li class="normal-link"><a href="/home/#services">Services</a></li>
+            <li class="normal-link"><a href="/home/#works">How It Works</a></li>
+            <div class="contact-link"><li><a href="/home/#contact" class="contact">Contact</a></li></div>
+            
+            <!-- Profile Dropdown -->
+            <div class="profile-container">
+                <div class="profile-icon" id="profileBtn">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="/auth/" class="dropdown-item logout">Logout</a>
+                </div>
+            </div>
+        </ul>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>Dashboard</h2>
+            <ul>
+                <li><a href="#"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+                <li><a href="#"><i class="fas fa-folder"></i> My Projects</a></li>
+                <!-- Sidebar Add Project Link -->
+                <li><a href="#" onclick="redirectToAddProject()"><i class="fas fa-plus"></i> Add Project</a></li>
+                <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <h1>Project Dashboard</h1>
+            <!-- Add New Project Button -->
+            <button class="add-project-btn" onclick="redirectToAddProject()">+ Add New Project</button>
+
+
+            <hr class="section-divider">
+
+            <div class="project-container">
+                <div class="project-card" data-title="AI Project" data-description="Detailed information about AI Project..." data-image="{% static 'projects/images/ai.jpg' %}">
+                    <img src="{% static 'projects/images/ai.jpg' %}" alt="AI Project">
+                    <h3>AI Project</h3>
+                    <p>Short description of AI Project...</p>
+                    <button class="learn-more">Learn More</button>
+                </div>
+            
+                <div class="project-card" data-title="Big Data Project" data-description="Detailed information about Big Data Project..." data-image="{% static 'projects/images/bigdata.jpg' %}">
+                    <img src="{% static 'projects/images/bigdata.jpg' %}" alt="Big Data Project">
+                    <h3>Big Data Project</h3>
+                    <p>Short description of Big Data Project...</p>
+                    <button class="learn-more">Learn More</button>
+                </div>
+            
+                <div class="project-card" data-title="IoT Smart Home" data-description="IoT-based home automation system for smart control." data-image="{% static 'projects/images/iot.jpg' %}">
+                    <img src="{% static 'projects/images/iot.jpg' %}" alt="IoT Smart Home">
+                    <h3>IoT Smart Home</h3>
+                    <p>Automated home control using IoT...</p>
+                    <button class="learn-more">Learn More</button>
+                </div>
+            
+                <div class="project-card" data-title="Travel Booking System" data-description="A website for searching and booking hotels & flights." data-image="{% static 'projects/images/travel.jpg' %}">
+                    <img src="{% static 'projects/images/travel.jpg' %}" alt="Travel Booking System">
+                    <h3>Travel Booking System</h3>
+                    <p>Search and book hotels & flights...</p>
+                    <button class="learn-more">Learn More</button>
+                </div>
+            </div>
+            
+            <!-- Modal for Project Details -->
+            <div id="projectModal" class="project-modal">
+                <div class="project-modal-content">
+                    <span class="project-close" onclick="closeProjectModal()">&times;</span>
+                    <img id="modalProjectImage" src="" alt="Project Image">
+                    <div class="modal-text">
+                        <h3 id="modalProjectTitle"></h3>
+                        <p id="modalProjectDescription"></p>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Aditya Kumar. All rights reserved.</p>
+    </footer> 
+</body>
+</html>
