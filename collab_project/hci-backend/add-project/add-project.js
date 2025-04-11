@@ -6,13 +6,11 @@ document.addEventListener('DOMContentLoaded', function() {
     
     let currentStudentCount = 1;
     
-    // Function to show alert
     function showAlert(message, type) {
         alertDiv.textContent = message;
         alertDiv.className = `alert alert-${type}`;
         alertDiv.style.display = 'block';
         
-        // Hide alert after 5 seconds
         setTimeout(() => {
             alertDiv.style.display = 'none';
         }, 5000);
