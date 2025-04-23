@@ -12,8 +12,9 @@ from datetime import datetime
 from .models import Project
 from .serializers import ProjectSerializer
 
+# Change the url according to your database collection
 client = MongoClient(
-    "mongodb+srv://anshvahini16:Curet24.Nelll@agility-user-base.d7iwuyn.mongodb.net/",
+    "mongodb+srv://<mongo_username>:<mongo_password>@agility-user-base.d7iwuyn.mongodb.net/",
     ssl=True)
 db = client['project_db']
 users_collection = db['authentication']
