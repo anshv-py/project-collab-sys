@@ -1,15 +1,161 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Add New Project</title>
-    <link rel="stylesheet" href="css/addProject.css">
+
+    <link rel="stylesheet" href="{% static 'projects/css/projects.css' %}">
+    <link rel="stylesheet" type="text/css" href="{% static 'projects/css/style.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    <style>
+        .form-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+        
+        .students-container {
+            margin-top: 10px;
+        }
+        
+        .student-input {
+            display: flex;
+            margin-bottom: 10px;
+        }
+        
+        .student-input input {
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        
+        .student-input button {
+            background-color: #ff4d4d;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 0 10px;
+            cursor: pointer;
+        }
+        
+        .add-student-btn {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .btn-container {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+        
+        .submit-btn, .cancel-btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+        }
+        
+        .submit-btn {
+            background-color: #4285f4;
+            color: white;
+        }
+        
+        .cancel-btn {
+            background-color: #f1f1f1;
+            color: #333;
+        }
+        
+        .image-upload {
+            display: flex;
+            flex-direction: column;
+            align-items: flex-start;
+        }
+        
+        .image-preview {
+            max-width: 200px;
+            max-height: 200px;
+            margin-top: 10px;
+            display: none;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+        }
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-btn {
+            font-size: 20px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            height: 40px;    
+            width: auto;
+            object-fit: contain;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            margin: 0 20px;
+            align-items: center;
+            gap: 40px;
+        }
+    </style>
 </head>
 <body>
+
     <!-- Navigation Bar -->
     <nav>
-        <div class="logo">ProjectManager</div>
+        <div class="nav-left">
+            <a href="javascript:history.back()" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="logo">
+                <img src="{% static 'projects/images/logo.png' %}" class="logo-img" alt="Logo">
+            </div>
+        </div>
         <ul class="nav-links">
             <li class="normal-link"><a href="index.html#home">Home</a></li>
             <li class="normal-link"><a href="index.html#about">About</a></li>
@@ -23,41 +169,121 @@
                     <i class="fas fa-user-circle"></i>
                 </div>
                 <div class="dropdown-menu" id="dropdownMenu">
-                    <a href="signin.html" class="dropdown-item logout">Logout</a>
+                    <a href="/auth/" class="dropdown-item logout">Logout</a>
                 </div>
             </div>
         </ul>
     </nav>
 
+    <!-- Main Container -->
+    <div class="container">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <h2>Dashboard</h2>
+            <ul>
+                <li><a href="/faculty/dashboard/"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+                <li><a href="{% url 'faculty_dashboard-my-projects' %}"><i class="fas fa-folder"></i> My Projects</a></li>
+                <li><a href="{% url 'faculty_dashboard-calendar' %}"><i class="fas fa-calendar"></i> Tasks & Deadlines</a></li>
+                <li><a href="#"><i class="fas fa-plus"></i> Add Project</a></li>
+                <li><a href="{% url 'faculty_dashboard-profile' %}"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+            </ul>
+        </aside>
 
-    <div>
-        <!-- Form Container -->
-        <div class="form-container">
+        <!-- Main Content -->
+        <main class="main-content">
             <h1>Add New Project</h1>
-            <div class="form-card">
-                <form id="addProjectForm">
-                    <label for="title">Project Title:</label>
-                    <input type="text" id="title" required>
+            
+            <div class="form-container">
+                <form id="addProjectForm" method="POST" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="projectName">Project Name*</label>
+                        <input type="text" id="projectName" name="projectName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="projectDomain">Domain*</label>
+                        <select id="projectDomain" name="projectDomain" required>
+                            <option value="">Select Domain</option>
+                            <option value="AI">Artificial Intelligence</option>
+                            <option value="BigData">Big Data</option>
+                            <option value="IoT">Internet of Things</option>
+                            <option value="Web">Web Development</option>
+                            <option value="Mobile">Mobile App Development</option>
+                            <option value="Blockchain">Blockchain</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
 
-                    <label for="description">Description:</label>
-                    <textarea id="description" required></textarea>
-
-                    <label for="field">Project Field:</label>
-                    <input type="text" id="field" required>
-
-                    <label for="image">Upload Image:</label>
-                    <input type="file" id="image" accept="image/*">
-
-                    <div class="button-group">
-                        <button type="submit" class="submit-btn">Add Project</button>
-                        <button type="button" class="close-btn" onclick="closeForm()">Close</button>
+                    <div class="form-group">
+                        <label for="projectStartDate">Start Date*</label>
+                        <input type="date" id="projectStartDate" name="projectStartDate" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="projectDescription">Project Description*</label>
+                        <textarea id="projectDescription" name="projectDescription" rows="4" required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="projectImage">Project Image</label>
+                        <div class="image-upload">
+                            <input type="file" id="projectImage" name="projectImage" accept="image/*">
+                            <img id="imagePreview" class="image-preview" alt="Image Preview">
+                        </div>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="studentCount">Number of Students*</label>
+                        <input type="number" id="studentCount" name="studentCount" style="width: 8%" min="1" max="10" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Student Names*</label>
+                        <div id="studentsContainer" class="students-container">
+                            <div class="student-input">
+                                <select name="students[]" id="students[]" required>
+                                    {% for name in user_names %}
+                                      <option value="{{ name }}">{{ name }}</option>
+                                    {% endfor %}
+                                </select>
+                            </div>
+                        </div>
+                        <button type="button" id="addStudentBtn" class="add-student-btn">+ Add Student</button>
+                    </div>
+                    
+                    <div class="btn-container">
+                        <button type="button" class="cancel-btn" onclick="window.location.href='/faculty/dashboard/';">Cancel</button>
+                        <button type="submit" class="submit-btn">Submit Project</button>
                     </div>
                 </form>
             </div>
-        </div>
+        </main>
     </div>
-    
 
-    <script src="js/addProject.js"></script>
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Aditya Kumar. All rights reserved.</p>
+    </footer>
+
+    <script src="{% static 'projects/js/addProject.js' %}"></script>
+    <script defer>
+        document.addEventListener('DOMContentLoaded', () => {
+            const profileIcon = document.getElementById('profileBtn');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+    
+            profileIcon.addEventListener('click', () => {
+                dropdownMenu.style.display = "flex";
+            });
+    
+            // Optional: Close dropdown if clicked outside
+            document.addEventListener('click', function (event) {
+                if (!profileIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.style.display = "none";
+                }
+            });
+        });
+    </script>
 </body>
 </html>

@@ -12,15 +12,20 @@
 
 
     <div class="container">
-    <!-- Navbar -->
-        <nav>
-            <div class="logo">ProjectManager</div>
+        <nav class="navbar">
+            <div class="nav-left">
+                <div class="logo">
+                    <img src="{% static 'projects/images/logo.png' %}" class="logo-img" alt="Logo">
+                </div>
+            </div>
             <ul class="nav-links">
                 <li class="normal-link"><a href="#home">Home</a></li>
                 <li class="normal-link"><a href="#about">About</a></li>
                 <li class="normal-link"><a href="#services">Services</a></li>
                 <li class="normal-link"><a href="#works">How It Works</a></li>
-                <div class="contact-link"><li><a href="#contact" class="contact">Contact</a></li></div>
+                <div class="contact-link">
+                    <li><a href="#contact" class="contact">Contact</a></li>
+                </div>
                 <div class="profile-container">
                     <a href="auth/" class="dropdown-item logout">SignIn/SignUp</a>
                 </div>

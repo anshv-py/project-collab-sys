@@ -8,16 +8,53 @@
 
     <link rel="stylesheet" href="{% static 'projects/css/projects.css' %}">
     <link rel="stylesheet" type="text/css" href="{% static 'projects/css/style.css' %}">
-    <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
 </head>
-<script src="{% static 'projects/images/index.js' %}"></script>
-<script src="{% static 'projects/images/addProject.js' %}"></script>
+<style>
+    .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .back-btn {
+        font-size: 20px;
+        color: #333;
+        text-decoration: none;
+    }
+    
+    .logo-img {
+        height: 40px;    
+        width: auto;
+        object-fit: contain;
+        display: inline-block;
+        vertical-align: middle;
+    }
+    
+    .nav-links li a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+    }
+    
+    .nav-links {
+        list-style: none;
+        display: flex;
+        margin: 0 20px;
+        align-items: center;
+        gap: 40px;
+    }
+</style>
 <body>
-
-    <!-- Navigation Bar -->
     <nav>
-        <div class="logo">ProjectManager</div>
+        <div class="nav-left">
+            <a href="{% url 'first' %}" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="logo">
+                <img src="{% static 'projects/images/logo.png' %}" class="logo-img" alt="Logo">
+            </div>
+        </div>
         <ul class="nav-links">
             <li class="normal-link"><a href="/home/#home">Home</a></li>
             <li class="normal-link"><a href="/home/#about">About</a></li>
@@ -44,10 +81,10 @@
             <h2>Dashboard</h2>
             <ul>
                 <li><a href="#"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
-                <li><a href="#"><i class="fas fa-folder"></i> My Projects</a></li>
-                <!-- Sidebar Add Project Link -->
-                <li><a href="#" onclick="redirectToAddProject()"><i class="fas fa-plus"></i> Add Project</a></li>
-                <li><a href="#"><i class="fas fa-user"></i> Profile</a></li>
+                <li><a href="my_projects/" class="active"><i class="fas fa-folder"></i> Projects</a></li>
+                <li><a href="calendar/"><i class="fas fa-tasks"></i> Tasks & Deadlines</a></li>
+                <li><a href="add_project/" onclick="redirectToAddProject()"><i class="fas fa-plus"></i> Add Project</a></li>
+                <li><a href="profile/"><i class="fas fa-user"></i> Profile</a></li>
                 <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
             </ul>
         </aside>
@@ -55,42 +92,37 @@
         <!-- Main Content -->
         <main class="main-content">
             <h1>Project Dashboard</h1>
-            <!-- Add New Project Button -->
-            <button class="add-project-btn" onclick="redirectToAddProject()">+ Add New Project</button>
-
-
+            <form method="GET" action="{% url 'faculty_dashboard-add-project' %}">
+                <button class="add-project-btn">+ Add New Project</button>
+            </form>
             <hr class="section-divider">
-
+        
             <div class="project-container">
-                <div class="project-card" data-title="AI Project" data-description="Detailed information about AI Project..." data-image="{% static 'projects/images/ai.jpg' %}">
-                    <img src="{% static 'projects/images/ai.jpg' %}" alt="AI Project">
-                    <h3>AI Project</h3>
-                    <p>Short description of AI Project...</p>
+                {% for project in projects %}
+                <div class="project-card"
+                     data-title="{{ project.name }}"
+                     data-description="{{ project.description }}"
+                     data-image="{{ project.image }}">
+                     {% if project.image %}
+                        <img src="{{ project.image }}" alt="Project Image">
+                     {% endif %}
+                    <h3>{{ project.name }}</h3>
+                    <p>{{ project.description }}</p>
                     <button class="learn-more">Learn More</button>
                 </div>
-            
-                <div class="project-card" data-title="Big Data Project" data-description="Detailed information about Big Data Project..." data-image="{% static 'projects/images/bigdata.jpg' %}">
-                    <img src="{% static 'projects/images/bigdata.jpg' %}" alt="Big Data Project">
-                    <h3>Big Data Project</h3>
-                    <p>Short description of Big Data Project...</p>
-                    <button class="learn-more">Learn More</button>
-                </div>
-            
-                <div class="project-card" data-title="IoT Smart Home" data-description="IoT-based home automation system for smart control." data-image="{% static 'projects/images/iot.jpg' %}">
-                    <img src="{% static 'projects/images/iot.jpg' %}" alt="IoT Smart Home">
-                    <h3>IoT Smart Home</h3>
-                    <p>Automated home control using IoT...</p>
-                    <button class="learn-more">Learn More</button>
-                </div>
-            
-                <div class="project-card" data-title="Travel Booking System" data-description="A website for searching and booking hotels & flights." data-image="{% static 'projects/images/travel.jpg' %}">
-                    <img src="{% static 'projects/images/travel.jpg' %}" alt="Travel Booking System">
-                    <h3>Travel Booking System</h3>
-                    <p>Search and book hotels & flights...</p>
-                    <button class="learn-more">Learn More</button>
-                </div>
+                {% endfor %}
             </div>
-            
+
+            {% if messages %}
+                <div id="flash-messages" style="position: fixed; top: 20px; right: 20px; z-index: 9999;">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }} fade-out" style="padding: 10px 20px; margin-bottom: 10px; border-radius: 5px; background-color: {% if message.tags == 'success' %}#d4edda{% elif message.tags == 'error' %}#f8d7da{% else %}#cce5ff{% endif %}; color: #000;">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        
             <!-- Modal for Project Details -->
             <div id="projectModal" class="project-modal">
                 <div class="project-modal-content">
@@ -102,13 +134,36 @@
                     </div>
                 </div>
             </div>
-
         </main>
     </div>
 
     <!-- Footer -->
     <footer class="footer">
         <p>&copy; 2025 Aditya Kumar. All rights reserved.</p>
-    </footer> 
+    </footer>
+    <script defer>
+        document.addEventListener('DOMContentLoaded', () => {
+            const profileIcon = document.getElementById('profileBtn');
+            const dropdownMenu = document.getElementById('dropdownMenu');
+    
+            profileIcon.addEventListener('click', () => {
+                dropdownMenu.style.display = "flex";
+            });
+    
+            // Optional: Close dropdown if clicked outside
+            document.addEventListener('click', function (event) {
+                if (!profileIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                    dropdownMenu.style.display = "none";
+                }
+            });
+        });
+    </script>
+    <script src="{% static 'projects/js/index.js' %}"></script>
+    <script>
+        setTimeout(() => {
+          const flash = document.getElementById("flash-messages");
+          if (flash) flash.style.display = "none";
+        }, 4000); 
+      </script>
 </body>
 </html>

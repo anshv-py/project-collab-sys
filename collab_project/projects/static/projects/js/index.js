@@ -87,11 +87,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const button = event.target.closest(".learn-more"); // Ensure the click is on the button
 
         if (!button) {
-            console.log("Click detected, but not on 'Learn More' button");
             return;
         }
-
-        console.log("'Learn More' button clicked!", button);
 
         const card = button.closest(".project-card"); // Find the parent project card
         if (!card) {

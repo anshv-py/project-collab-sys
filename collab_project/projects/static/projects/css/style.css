@@ -29,14 +29,6 @@
         z-index: 100;
         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
     }
-
-    .logo {
-        font-size: 18px;
-        font-weight: bold;
-        color: #333;
-    }
-    
-
     .nav-links {
         list-style: none;
         display: flex;
@@ -572,12 +564,7 @@
         width: 150px;
         box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
         flex-direction: column;
-        z-index: 101;
-    }
-
-    /* Show Dropdown */
-    .dropdown-menu.show {
-        display: flex;
+        z-index: 9999;
     }
 
     /* Dropdown Items */
@@ -613,6 +600,7 @@
         height: 100%; /* Ensures alignment with navbar */
         margin-left: 20px; /* Space from the 'Contact' link */
         cursor: pointer;
+        display: inline-block;
     }
 
     /* Profile Icon */
@@ -632,4 +620,37 @@
     /* Hover Effect for Dropdown List Items */
     .dropdown-menu li:hover {
         background-color: #f0f0f0;
+    }
+    .nav-left {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .back-btn {
+        font-size: 20px;
+        color: #333;
+        text-decoration: none;
+    }
+    
+    .logo-img {
+        height: 40px;    
+        width: auto;
+        object-fit: contain;
+        display: inline-block;
+        vertical-align: middle;
+    }
+    
+    .nav-links li a {
+        text-decoration: none;
+        color: #333;
+        font-weight: 500;
+    }
+    
+    .nav-links {
+        list-style: none;
+        display: flex;
+        margin: 0 20px;
+        align-items: center;
+        gap: 40px;
     }

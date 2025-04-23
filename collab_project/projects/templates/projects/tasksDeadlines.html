@@ -1,0 +1,1533 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ProjectManager</title>
+
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+    
+    <style>
+        /* Reset Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+        }
+
+        body {
+            background-color: #f4f4f4;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        /* Navigation Bar */
+        nav {
+            width: 100%;
+            height: 70px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: white;
+            padding: 10px 50px;
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Logo */
+        .logo {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+        }
+
+        /* Navbar Links */
+        .nav-links {
+            list-style: none;
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin: 0 20px;
+        }
+
+        /* Normal Links */
+        .nav-links .normal-link a {
+            color: #333;
+            text-decoration: none;
+            font-size: 15px;
+            font-weight: 600;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        /* Underline Animation */
+        .nav-links .normal-link a::after {
+            content: "";
+            position: absolute;
+            width: 0%;
+            height: 2px;
+            bottom: -5px;
+            left: 0;
+            background-color: #28a745;
+            transition: width 0.4s ease-in-out;
+        }
+
+        /* Hover Effects */
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        .nav-links a:hover {
+            color: #09a110;
+        }
+
+        /* Contact link styling */
+        .contact-link {
+            display: inline-block;
+        }
+
+        .contact-link a {
+            color: rgb(41, 41, 41);
+            text-transform: uppercase;
+            text-decoration: none;
+            border: 2px solid black;
+            padding: 6px 12px;
+            transition: background 0.4s ease-in-out, border 0.4s ease-in-out, color 0.4s ease-in-out;
+        }
+
+        /* Smooth hover effect */
+        .contact-link a:hover {
+            background: #1ad041;
+            border: 2px dashed black;
+            color: white;
+        }
+
+        /* Profile Container */
+        .profile-container {
+            position: relative;
+            height: 100%;
+            margin-left: 20px;
+        }
+
+        /* Logout/SignIn link */
+        .dropdown-item.logout {
+            color: #f44336;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        .dropdown-item.logout:hover {
+            color: #d32f2f;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background: #fff;
+            padding: 20px;
+            height: 100vh;
+            position: fixed;
+            left: 0;
+            top: 70px;
+            box-shadow: 2px 0px 10px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+        }
+
+        /* Sidebar Hover Animation */
+        .sidebar:hover {
+            transition: 0.3s;
+        }
+
+        .sidebar h2 {
+            font-size: 22px;
+            margin-bottom: 20px;
+            color: #333;
+            transition: color 0.3s ease;
+        }
+
+        /* Sidebar Text Animation */
+        .sidebar:hover h2 {
+            color: #09a110;
+        }
+
+        .sidebar ul {
+            list-style: none;
+        }
+
+        .sidebar ul li {
+            margin-bottom: 15px;
+        }
+
+        /* Sidebar Link Hover Animation */
+        .sidebar ul li a {
+            color: #333;
+            text-decoration: none;
+            font-size: 16px;
+            display: block;
+            padding: 10px;
+            border-radius: 5px;
+            transition: background 0.3s, color 0.3s;
+        }
+
+        /* Sidebar Hover Effect */
+        .sidebar ul li a:hover {
+            background: rgb(3, 61, 3);
+            color: white;
+        }
+
+        /* Active sidebar link */
+        .sidebar ul li a.active {
+            background: rgb(3, 61, 3);
+            color: white;
+        }
+
+        /* Main Content */
+        .main-content {
+            margin-left: 270px;
+            padding: 30px;
+            margin-top: 90px;
+            flex: 1;
+            padding-bottom: 80px;
+        }
+
+        /* Calendar Header */
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .calendar-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .month-year {
+            font-size: 24px;
+            font-weight: 600;
+        }
+
+        .nav-btn {
+            background: none;
+            border: none;
+            font-size: 20px;
+            cursor: pointer;
+            color: #333;
+            transition: color 0.3s;
+        }
+
+        .nav-btn:hover {
+            color: #28a745;
+        }
+
+        .view-options {
+            display: flex;
+            gap: 10px;
+        }
+
+        .view-btn {
+            background: #f1f1f1;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .view-btn.active {
+            background: #28a745;
+            color: white;
+        }
+
+        /* Calendar Grid */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 10px;
+            margin-bottom: 30px;
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            font-weight: 600;
+            padding: 10px;
+            background: #e8f5e9;
+            color: #28a745;
+            border-radius: 4px;
+        }
+
+        .calendar-day {
+            min-height: 120px;
+            background: white;
+            border-radius: 6px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 8px;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+        }
+
+        .day-number {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #333;
+            display: inline-block;
+        }
+
+        .other-month {
+            opacity: 0.5;
+        }
+
+        .today {
+            background: #e8f5e9;
+            border: 2px solid #28a745;
+        }
+
+        .today .day-number {
+            color: #28a745;
+        }
+
+        .has-events {
+            position: relative;
+        }
+
+        .has-events::after {
+            content: "";
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            width: 8px;
+            height: 8px;
+            background: #28a745;
+            border-radius: 50%;
+        }
+
+        /* Events in calendar */
+        .event {
+            background: #e8f5e9;
+            color: #1b5e20;
+            border-left: 3px solid #28a745;
+            padding: 4px 6px;
+            margin-bottom: 5px;
+            border-radius: 2px;
+            font-size: 12px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+        .deadline {
+            background: #ffebee;
+            color: #c62828;
+            border-left: 3px solid #ef5350;
+        }
+
+        .meeting {
+            background: #e3f2fd;
+            color: #0d47a1;
+            border-left: 3px solid #2196f3;
+        }
+
+        /* Event Modal */
+        .event-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+        }
+
+        /* .event-modal-content {
+            background-color: white;
+            margin: 5% auto;
+            padding: 25px;
+            width: 50%;
+            max-width: 600px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+        } */
+        .event-modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            width: 40%;  /* Reduced from 50% */
+            max-width: 450px;  /* Reduced from 600px */
+            max-height: 70vh;  /* Limit height to 70% of viewport height */
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            position: relative;
+            overflow-y: auto;  /* Make content scrollable */
+        }
+
+        /* Add scrollbar styling for better appearance */
+        .event-modal-content::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+
+        .event-modal-content::-webkit-scrollbar-track {
+            background: #f1f1f1;
+            border-radius: 4px;
+        }
+
+        .event-modal-content::-webkit-scrollbar-thumb {
+            background: #c1c1c1;
+            border-radius: 4px;
+        }
+
+        .event-modal-content::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8;
+        }
+
+
+        .close-modal {
+            font-weight: bold;
+            cursor: pointer;
+            color: #666;
+            position: sticky;
+            top: 0;
+            right: 0;
+            font-size: 22px;  /* Reduced from 24px */
+            float: right;
+            z-index: 2;
+        }
+
+        .close-modal:hover {
+            color: #000;
+        }
+
+        .modal-date {
+            font-size: 15px;
+            font-weight: 600;
+            margin-bottom: 12px;
+            color: #28a745;
+            position: sticky;
+            top: 0;
+            background-color: white;
+            padding-bottom: 10px;
+            z-index: 1;
+        }
+
+        /* Form Styles */
+        .form-group {
+        margin-bottom: 15px;  /* Reduced from 20px */
+        }
+
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+
+        textarea.form-control {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #28a745;
+            box-shadow: 0 0 0 2px rgba(40, 167, 69, 0.25);
+        }
+
+        select.form-control {
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23333' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 10px center;
+            background-size: 16px;
+            padding-right: 30px;
+        }
+
+        .file-upload {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .file-upload-btn {
+            background: #f1f1f1;
+            border: 1px dashed #ccc;
+            padding: 10px;
+            text-align: center;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .file-upload-btn:hover {
+            background: #e8f5e9;
+            border-color: #28a745;
+        }
+
+        .file-upload-btn i {
+            font-size: 24px;
+            color: #666;
+            margin-bottom: 5px;
+        }
+
+        .uploaded-files {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .file-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f1f1f1;
+            padding: 8px 12px;
+            border-radius: 4px;
+            margin-bottom: 5px;
+        }
+
+        .file-item span {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .file-item i {
+            color: #666;
+        }
+
+        .remove-file {
+            color: #f44336;
+            cursor: pointer;
+        }
+
+        .modal-footer {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 15px;  
+            padding-top: 10px;
+            position: sticky;
+            bottom: 0;
+            background-color: white;
+            z-index: 1;
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        .btn-primary {
+            background-color: #28a745;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #218838;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        /* Daily Events List */
+        .daily-events-list {
+            margin-top: 30px;
+        }
+
+        .events-date {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: #28a745;
+        }
+
+        .events-list {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .event-item {
+            display: flex;
+            padding: 10px;
+            border-left: 4px solid #28a745;
+            margin-bottom: 10px;
+            background: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .event-item.deadline {
+            border-left-color: #ef5350;
+        }
+
+        .event-item.meeting {
+            border-left-color: #2196f3;
+        }
+
+        .event-time {
+            width: 80px;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .event-details {
+            flex: 1;
+        }
+
+        .event-title {
+            font-weight: 600;
+            margin-bottom: 5px;
+        }
+
+        .event-description {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .event-actions {
+            display: flex;
+            gap: 10px;
+            margin-left: 15px;
+        }
+
+        .event-action-btn {
+            background: none;
+            border: none;
+            cursor: pointer;
+            color: #666;
+            transition: color 0.3s;
+        }
+
+        .event-action-btn:hover {
+            color: #28a745;
+        }
+
+        .delete-event-btn:hover {
+            color: #f44336;
+        }
+
+        /* Footer */
+        .footer {
+            width: 100%;
+            height: 50px;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            background: rgb(2, 41, 2);
+            color: white;
+            text-align: center;
+            padding: 15px;
+            transition: background 0.3s;
+        }
+
+        .footer:hover {
+            background: rgb(4, 55, 4);
+        }
+
+        /* Responsive */
+        @media (max-width: 1200px) {
+            .event-modal-content {
+                width: 70%;
+            }
+        }
+
+        @media (max-width: 992px) {
+            .calendar-grid {
+                gap: 5px;
+            }
+            
+            .calendar-day {
+                min-height: 100px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-content {
+                margin-left: 0;
+                padding: 20px;
+                margin-top: 80px;
+            }
+
+            .sidebar {
+                transform: translateX(-100%);
+                z-index: 99;
+            }
+
+            .sidebar.active {
+                transform: translateX(0);
+            }
+
+            .event-modal-content {
+                width: 90%;
+            }
+
+            nav {
+                padding: 10px 20px;
+            }
+
+            .nav-links {
+                gap: 20px;
+            }
+
+            .calendar-grid {
+                grid-template-columns: repeat(7, 1fr);
+            }
+
+            .calendar-day {
+                min-height: 80px;
+                padding: 5px;
+            }
+
+            .day-number {
+                font-size: 12px;
+            }
+
+            .event {
+                padding: 2px 4px;
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 576px) {
+            .calendar-header {
+                flex-direction: column;
+                gap: 10px;
+                align-items: flex-start;
+            }
+            
+            .view-options {
+                width: 100%;
+                justify-content: space-between;
+            }
+            
+            .view-btn {
+                flex: 1;
+                text-align: center;
+            }
+        }
+        .nav-left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .back-btn {
+            font-size: 20px;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .logo-img {
+            height: 40px;    
+            width: auto;
+            object-fit: contain;
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .nav-links li a {
+            text-decoration: none;
+            color: #333;
+            font-weight: 500;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            margin: 0 20px;
+            align-items: center;
+            gap: 40px;
+        }
+        .profile-dropdown {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        /* Profile Icon */
+        .profile-icon {
+            height: 100%;
+            border-radius: 50%;
+            transition: color 0.3s ease;
+        }
+
+        /* Hover Effect on Profile Icon */
+        .profile-icon:hover i {
+            color: #09a110;
+        }
+
+        /* Dropdown Menu */
+        .dropdown-menu {
+            display: none;  /* Hidden by default */
+            position: absolute;
+            right: 0;
+            top: 45px;  /* Aligns dropdown below the icon */
+            background: white;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            list-style: none;
+            padding: 10px 0;
+            width: 150px;
+            box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.1);
+            flex-direction: column;
+            z-index: 9999;
+        }
+
+        /* Dropdown Items */
+        .dropdown-item {
+            padding: 2px 10px;
+            color: #333;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 600;
+            display: block;
+            transition: background 0.3s ease, color 0.3s ease;
+        }
+
+        /* Hover Effect for Dropdown Items */
+        .dropdown-item:hover {
+            background: #f1f1f1;
+        }
+
+        /* Logout Button */
+        .logout {
+            color: red;
+            font-weight: bold;
+        }
+
+        /* Logout Hover Effect */
+        .logout:hover {
+            background: rgba(255, 0, 0, 0.1);
+        }
+
+        /* Profile Container */
+        .profile-container {
+            position: relative;
+            height: 100%; /* Ensures alignment with navbar */
+            margin-left: 20px; /* Space from the 'Contact' link */
+            cursor: pointer;
+            display: inline-block;
+        }
+
+        /* Profile Icon */
+        .profile-icon i {
+            font-size: 24px;
+            color: #333;
+            transition: color 0.3s ease;
+            height: 100%;
+        }
+
+        /* Dropdown List Items */
+        .dropdown-menu li {
+            padding: 8px;
+            text-align: left;
+        }
+
+        /* Hover Effect for Dropdown List Items */
+        .dropdown-menu li:hover {
+            background-color: #f0f0f0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav>
+        <div class="nav-left">
+            <a href="javascript:history.back()" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="logo">
+                <img src="{% static 'projects/images/logo.png' %}" class="logo-img" alt="Logo">
+            </div>
+        </div>
+        <ul class="nav-links">
+            <li class="normal-link"><a href="/home/#home">Home</a></li>
+            <li class="normal-link"><a href="/home/#about">About</a></li>
+            <li class="normal-link"><a href="/home/#services">Services</a></li>
+            <li class="normal-link"><a href="/home/#works">How It Works</a></li>
+            <div class="contact-link"><li><a href="/home/#contact" class="contact">Contact</a></li></div>
+            <!-- Profile Dropdown -->
+            <div class="profile-container">
+                <div class="profile-icon" id="profileBtn">
+                    <i class="fas fa-user-circle"></i>
+                </div>
+                <div class="dropdown-menu" id="dropdownMenu">
+                    <a href="/auth/" class="dropdown-item logout">Logout</a>
+                </div>
+            </div>
+        </ul>
+    </nav>
+
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <h2>Dashboard</h2>
+        <ul>
+            {% if request.session.role == 'faculty' %}
+                <li><a href="/faculty/dashboard/"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+                <li><a href="{% url 'faculty_dashboard-my-projects' %}"><i class="fas fa-folder"></i> My Projects</a></li>
+                <li><a href="#" class="active"><i class="fas fa-tasks"></i> Tasks & Deadlines</a></li>
+                <li><a href="{% url 'faculty_dashboard-add-project' %}" onclick="redirectToAddProject()"><i class="fas fa-plus"></i> Add Project</a></li>
+                <li><a href="{% url 'faculty_dashboard-profile' %}"><i class="fas fa-user"></i> Profile</a></li>
+            {% elif request.session.role == 'student' %}
+                <li><a href="/student/dashboard/"><i class="fas fa-tachometer-alt"></i> Overview</a></li>
+                <li><a href="{% url 'student_dashboard-my-projects' %}"><i class="fas fa-folder"></i> My Projects</a></li>
+                <li><a href="#" class="active"><i class="fas fa-tasks"></i> Tasks & Deadlines</a></li>
+                <li><a href="{% url 'student_dashboard-profile' %}"><i class="fas fa-user"></i> Profile</a></li>
+            {% endif %}
+            <li><a href="#"><i class="fas fa-cog"></i> Settings</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <h1>Calendar</h1>
+        
+        <!-- Calendar Header -->
+        <div class="calendar-header">
+            <div class="calendar-title">
+                <button class="nav-btn" id="prevMonth"><i class="fas fa-chevron-left"></i></button>
+                <h2 class="month-year" id="currentMonthYear">April 2025</h2>
+                <button class="nav-btn" id="nextMonth"><i class="fas fa-chevron-right"></i></button>
+                <button class="nav-btn" id="todayBtn" title="Today"><i class="fas fa-calendar-day"></i></button>
+            </div>
+            <div class="view-options">
+                <button class="view-btn active" data-view="month">Month</button>
+                <button class="view-btn" data-view="week">Week</button>
+                <button class="view-btn" data-view="day">Day</button>
+            </div>
+        </div>
+
+        <!-- Calendar Grid -->
+        <div class="calendar-grid" id="calendarGrid">
+            <!-- Day headers -->
+            <div class="calendar-day-header">Sun</div>
+            <div class="calendar-day-header">Mon</div>
+            <div class="calendar-day-header">Tue</div>
+            <div class="calendar-day-header">Wed</div>
+            <div class="calendar-day-header">Thu</div>
+            <div class="calendar-day-header">Fri</div>
+            <div class="calendar-day-header">Sat</div>
+            
+            <!-- Calendar days will be generated by JavaScript -->
+        </div>
+
+        <!-- Daily Events List -->
+        <div class="daily-events-list" id="dailyEventsList">
+            <h3 class="events-date">Events for April 21, 2025</h3>
+            <div class="events-list">
+                <div class="event-item">
+                    <div class="event-time">10:00 AM</div>
+                    <div class="event-details">
+                        <div class="event-title">Team Meeting</div>
+                        <div class="event-description">Weekly project progress update with the team</div>
+                    </div>
+                    <div class="event-actions">
+                        <button class="event-action-btn edit-event-btn" title="Edit"><i class="fas fa-edit"></i></button>
+                        <button class="event-action-btn delete-event-btn" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                </div>
+                <div class="event-item deadline">
+                    <div class="event-time">11:59 PM</div>
+                    <div class="event-details">
+                        <div class="event-title">Assignment Due</div>
+                        <div class="event-description">Database optimization project report submission</div>
+                    </div>
+                    <div class="event-actions">
+                        <button class="event-action-btn edit-event-btn" title="Edit"><i class="fas fa-edit"></i></button>
+                        <button class="event-action-btn delete-event-btn" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Event Modal -->
+        <div id="eventModal" class="event-modal">
+            <div class="event-modal-content">
+                <span class="close-modal">&times;</span>
+                <h3 class="modal-date" id="modalDate">April 21, 2025</h3>
+                
+                <form id="eventForm">
+                    <div class="form-group">
+                        <label for="eventTitle">Event Title</label>
+                        <input type="text" id="eventTitle" class="form-control" placeholder="Enter event title" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventType">Event Type</label>
+                        <select id="eventType" class="form-control">
+                            <option value="task">Task</option>
+                            <option value="deadline">Deadline</option>
+                            <option value="meeting">Meeting</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventTime">Time</label>
+                        <input type="time" id="eventTime" class="form-control">
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="eventDescription">Description</label>
+                        <textarea id="eventDescription" class="form-control" placeholder="Enter event description"></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Attachments</label>
+                        <div class="file-upload">
+                            <label for="fileInput" class="file-upload-btn">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <div>Drag files here or click to upload</div>
+                            </label>
+                            <input type="file" id="fileInput" style="display:none;" multiple>
+                            
+                            <div class="uploaded-files" id="uploadedFiles">
+                                <!-- File items will be inserted here by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-group" id="reminderGroup">
+                        <label for="eventReminder">Set Reminder</label>
+                        <select id="eventReminder" class="form-control">
+                            <option value="none">No reminder</option>
+                            <option value="10">10 minutes before</option>
+                            <option value="30">30 minutes before</option>
+                            <option value="60">1 hour before</option>
+                            <option value="1440">1 day before</option>
+                        </select>
+                    </div>
+                    
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Event</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <p>&copy; 2025 Aditya Kumar. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Current date
+        let currentDate = new Date();
+        let selectedDate = new Date();
+        let events = {}; // To store events
+
+        // Sample events data
+        const sampleEvents = {
+            "2025-04-21": [
+                { title: "Team Meeting", time: "10:00", type: "meeting", description: "Weekly project progress update with the team" },
+                { title: "Assignment Due", time: "23:59", type: "deadline", description: "Database optimization project report submission" }
+            ],
+            "2025-04-15": [
+                { title: "Project Milestone", time: "14:00", type: "task", description: "Complete frontend implementation" }
+            ],
+            "2025-04-23": [
+                { title: "Faculty Meeting", time: "11:00", type: "meeting", description: "Discussion about course projects" },
+                { title: "Study Group", time: "16:00", type: "task", description: "AI algorithms study session" }
+            ],
+            "2025-04-28": [
+                { title: "Final Report Due", time: "23:59", type: "deadline", description: "Submit final project report" }
+            ]
+        };
+
+        // Initialize calendar
+        document.addEventListener('DOMContentLoaded', function() {
+            // Load sample events
+            events = sampleEvents;
+            
+            // Generate calendar
+            generateCalendar(currentDate);
+            
+            // Set up event listeners
+            setupEventListeners();
+        });
+
+        function generateCalendar(date) {
+            const firstDay = new Date(date.getFullYear(), date.getMonth(), 1);
+            const lastDay = new Date(date.getFullYear(), date.getMonth() + 1, 0);
+            const startDate = new Date(firstDay);
+            startDate.setDate(firstDay.getDate() - firstDay.getDay()); // Start from Sunday
+            
+            // Update month/year display
+            document.getElementById('currentMonthYear').textContent = 
+                date.toLocaleString('default', { month: 'long', year: 'numeric' });
+            
+            // Clear previous calendar days
+            const calendarGrid = document.getElementById('calendarGrid');
+            const dayHeaders = calendarGrid.querySelectorAll('.calendar-day-header');
+            
+            // Remove all elements except day headers
+            while (calendarGrid.children.length > 7) {
+                calendarGrid.removeChild(calendarGrid.lastChild);
+            }
+            
+            // Generate calendar days
+            const today = new Date();
+            for (let i = 0; i < 42; i++) {  // 6 weeks * 7 days
+                const currentDate = new Date(startDate);
+                currentDate.setDate(startDate.getDate() + i);
+                
+                // Create day element
+                const dayEl = document.createElement('div');
+                dayEl.className = 'calendar-day';
+                
+                // Add other-month class if date is from previous/next month
+                if (currentDate.getMonth() !== date.getMonth()) {
+                    dayEl.classList.add('other-month');
+                }
+                
+                // Add today class
+                if (currentDate.toDateString() === today.toDateString()) {
+                    dayEl.classList.add('today');
+                }
+                
+                // Day number
+                const dayNumber = document.createElement('span');
+                dayNumber.className = 'day-number';
+                dayNumber.textContent = currentDate.getDate();
+                dayEl.appendChild(dayNumber);
+                
+                // Add events for this day
+                const dateStr = formatDateKey(currentDate);
+                if (events[dateStr] && events[dateStr].length > 0) {
+                    dayEl.classList.add('has-events');
+                    events[dateStr].slice(0, 2).forEach(event => {
+                        const eventEl = document.createElement('div');
+                        eventEl.className = `event ${event.type}`;
+                        eventEl.textContent = `${event.time} ${event.title}`;
+                        dayEl.appendChild(eventEl);
+                    });
+                    
+                    // Show "+X more" if there are more than 2 events
+                    if (events[dateStr].length > 2) {
+                        const moreEl = document.createElement('div');
+                        moreEl.className = 'event more';
+                        moreEl.textContent = `+${events[dateStr].length - 2} more`;
+                        dayEl.appendChild(moreEl);
+                    }
+                }
+                
+                // Add click event to open modal
+                dayEl.addEventListener('click', () => {
+                    selectedDate = new Date(currentDate);
+                    openEventModal();
+                });
+                
+                calendarGrid.appendChild(dayEl);
+            }
+            
+            // Update daily events list
+            updateDailyEventsList(selectedDate);
+        }
+
+        // Complete the formatDateKey function
+function formatDateKey(date) {
+    return `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(date.getDate()).padStart(2, '0')}`;
+}
+
+// Update the daily events list
+function updateDailyEventsList(date) {
+    const dateStr = formatDateKey(date);
+    const eventsList = document.querySelector('.events-list');
+    const eventsDate = document.querySelector('.events-date');
+    
+    // Update date display
+    eventsDate.textContent = `Events for ${date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' })}`;
+    
+    // Clear previous events
+    eventsList.innerHTML = '';
+    
+    // Add events for selected date
+    if (events[dateStr] && events[dateStr].length > 0) {
+        events[dateStr].forEach(event => {
+            const eventItem = document.createElement('div');
+            eventItem.className = `event-item ${event.type}`;
+            
+            eventItem.innerHTML = `
+                <div class="event-time">${formatTime(event.time)}</div>
+                <div class="event-details">
+                    <div class="event-title">${event.title}</div>
+                    <div class="event-description">${event.description || ''}</div>
+                </div>
+                <div class="event-actions">
+                    <button class="event-action-btn edit-event-btn" title="Edit"><i class="fas fa-edit"></i></button>
+                    <button class="event-action-btn delete-event-btn" title="Delete"><i class="fas fa-trash-alt"></i></button>
+                </div>
+            `;
+            
+            // Add event listeners to buttons
+            const editBtn = eventItem.querySelector('.edit-event-btn');
+            const deleteBtn = eventItem.querySelector('.delete-event-btn');
+            
+            editBtn.addEventListener('click', () => {
+                openEditEventModal(dateStr, event);
+            });
+            
+            deleteBtn.addEventListener('click', () => {
+                deleteEvent(dateStr, event);
+            });
+            
+            eventsList.appendChild(eventItem);
+        });
+    } else {
+        // No events for this day
+        const noEvents = document.createElement('div');
+        noEvents.className = 'no-events';
+        noEvents.textContent = 'No events scheduled for this day.';
+        eventsList.appendChild(noEvents);
+    }
+}
+
+// Format time for display
+function formatTime(timeStr) {
+    if (!timeStr) return '';
+    
+    // Check if it's just hours and minutes (HH:MM)
+    if (timeStr.length <= 5) {
+        const [hours, minutes] = timeStr.split(':');
+        const hour = parseInt(hours);
+        const ampm = hour >= 12 ? 'PM' : 'AM';
+        const hour12 = hour % 12 || 12;
+        return `${hour12}:${minutes} ${ampm}`;
+    }
+    
+    return timeStr;
+}
+
+// Open event modal for creating new events
+function openEventModal() {
+    const modal = document.getElementById('eventModal');
+    const modalDate = document.getElementById('modalDate');
+    const form = document.getElementById('eventForm');
+    
+    // Clear form
+    form.reset();
+    document.getElementById('uploadedFiles').style.display = 'none';
+    document.getElementById('uploadedFiles').innerHTML = '';
+    
+    // Set modal date
+    modalDate.textContent = selectedDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    
+    // Show modal
+    modal.style.display = 'block';
+}
+
+// Open event modal for editing existing events
+function openEditEventModal(dateStr, event) {
+    const modal = document.getElementById('eventModal');
+    const modalDate = document.getElementById('modalDate');
+    const form = document.getElementById('eventForm');
+    
+    // Fill form with event data
+    document.getElementById('eventTitle').value = event.title;
+    document.getElementById('eventType').value = event.type;
+    document.getElementById('eventTime').value = event.time;
+    document.getElementById('eventDescription').value = event.description || '';
+    document.getElementById('eventReminder').value = event.reminder || 'none';
+    
+    // Set modal date
+    modalDate.textContent = selectedDate.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric' });
+    
+    // Store reference to the event being edited
+    form.dataset.editDateStr = dateStr;
+    form.dataset.editEventIndex = events[dateStr].indexOf(event);
+    
+    // Show modal
+    modal.style.display = 'block';
+}
+
+// Delete an event
+function deleteEvent(dateStr, event) {
+    if (confirm('Are you sure you want to delete this event?')) {
+        const eventIndex = events[dateStr].indexOf(event);
+        if (eventIndex !== -1) {
+            events[dateStr].splice(eventIndex, 1);
+            
+            // Remove date key if no more events
+            if (events[dateStr].length === 0) {
+                delete events[dateStr];
+            }
+            
+            // Update UI
+            generateCalendar(currentDate);
+            updateDailyEventsList(selectedDate);
+        }
+    }
+}
+
+// Save event (create new or update existing)
+function saveEvent(form) {
+    const title = document.getElementById('eventTitle').value;
+    const type = document.getElementById('eventType').value;
+    const time = document.getElementById('eventTime').value;
+    const description = document.getElementById('eventDescription').value;
+    const reminder = document.getElementById('eventReminder').value;
+    
+    const dateStr = formatDateKey(selectedDate);
+    
+    // Initialize events array for this date if it doesn't exist
+    if (!events[dateStr]) {
+        events[dateStr] = [];
+    }
+    
+    // Check if we're editing an existing event
+    if (form.dataset.editDateStr && form.dataset.editEventIndex) {
+        const editDateStr = form.dataset.editDateStr;
+        const editEventIndex = parseInt(form.dataset.editEventIndex);
+        
+        // Update existing event
+        events[editDateStr][editEventIndex] = {
+            title,
+            type,
+            time,
+            description,
+            reminder: reminder !== 'none' ? reminder : null
+        };
+        
+        // Clear edit data
+        delete form.dataset.editDateStr;
+        delete form.dataset.editEventIndex;
+    } else {
+        // Create new event
+        events[dateStr].push({
+            title,
+            type,
+            time,
+            description,
+            reminder: reminder !== 'none' ? reminder : null
+        });
+    }
+    
+    // Update UI
+    generateCalendar(currentDate);
+    updateDailyEventsList(selectedDate);
+    
+    // Close modal
+    closeEventModal();
+}
+
+// Close event modal
+function closeEventModal() {
+    const modal = document.getElementById('eventModal');
+    modal.style.display = 'none';
+}
+
+// Set up all event listeners
+function setupEventListeners() {
+    // Prev month button
+    document.getElementById('prevMonth').addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() - 1);
+        generateCalendar(currentDate);
+    });
+    
+    // Next month button
+    document.getElementById('nextMonth').addEventListener('click', () => {
+        currentDate.setMonth(currentDate.getMonth() + 1);
+        generateCalendar(currentDate);
+    });
+    
+    // Today button
+    document.getElementById('todayBtn').addEventListener('click', () => {
+        currentDate = new Date();
+        selectedDate = new Date();
+        generateCalendar(currentDate);
+        updateDailyEventsList(selectedDate);
+    });
+    
+    // View buttons
+    const viewButtons = document.querySelectorAll('.view-btn');
+    viewButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+            // Remove active class from all buttons
+            viewButtons.forEach(b => b.classList.remove('active'));
+            
+            // Add active class to clicked button
+            btn.classList.add('active');
+            
+            // Change view based on data-view attribute
+            const view = btn.getAttribute('data-view');
+            changeCalendarView(view);
+        });
+    });
+    
+    // Event form submission
+    document.getElementById('eventForm').addEventListener('submit', (e) => {
+        e.preventDefault();
+        saveEvent(e.target);
+    });
+    
+    // Cancel button
+    document.getElementById('cancelBtn').addEventListener('click', closeEventModal);
+    
+    // Close modal button
+    document.querySelector('.close-modal').addEventListener('click', closeEventModal);
+    
+    // Close modal when clicking outside
+    window.addEventListener('click', (e) => {
+        const modal = document.getElementById('eventModal');
+        if (e.target === modal) {
+            closeEventModal();
+        }
+    });
+    
+    // File upload handling
+    document.getElementById('fileInput').addEventListener('change', handleFileUpload);
+    
+    // Initialize drag and drop for file upload
+    initDragAndDrop();
+}
+
+function handleFileUpload(e) {
+    const files = e.target.files;
+    if (files.length > 0) {
+        displayUploadedFiles(files);
+    }
+}
+
+function displayUploadedFiles(files) {
+    const uploadedFilesContainer = document.getElementById('uploadedFiles');
+    uploadedFilesContainer.innerHTML = '';
+    uploadedFilesContainer.style.display = 'block';
+    
+    Array.from(files).forEach(file => {
+        const fileItem = document.createElement('div');
+        fileItem.className = 'file-item';
+        
+        // Determine file icon based on type
+        let fileIcon = 'fa-file';
+        if (file.type.includes('image')) {
+            fileIcon = 'fa-file-image';
+        } else if (file.type.includes('pdf')) {
+            fileIcon = 'fa-file-pdf';
+        } else if (file.type.includes('word') || file.name.endsWith('.doc') || file.name.endsWith('.docx')) {
+            fileIcon = 'fa-file-word';
+        } else if (file.type.includes('excel') || file.name.endsWith('.xls') || file.name.endsWith('.xlsx')) {
+            fileIcon = 'fa-file-excel';
+        }
+        
+        fileItem.innerHTML = `
+            <span><i class="fas ${fileIcon}"></i> ${file.name}</span>
+            <i class="fas fa-times remove-file"></i>
+        `;
+        
+        // Add remove file functionality
+        fileItem.querySelector('.remove-file').addEventListener('click', () => {
+            fileItem.remove();
+            if (uploadedFilesContainer.children.length === 0) {
+                uploadedFilesContainer.style.display = 'none';
+            }
+        });
+        
+        uploadedFilesContainer.appendChild(fileItem);
+    });
+}
+
+function initDragAndDrop() {
+    const dropZone = document.querySelector('.file-upload-btn');
+    
+    // Prevent default behaviors for drag events
+    ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, preventDefaults, false);
+    });
+    
+    function preventDefaults(e) {
+        e.preventDefault();
+        e.stopPropagation();
+    }
+    
+    ['dragenter', 'dragover'].forEach(eventName => {
+        dropZone.addEventListener(eventName, highlight, false);
+    });
+    
+    ['dragleave', 'drop'].forEach(eventName => {
+        dropZone.addEventListener(eventName, unhighlight, false);
+    });
+    
+    function highlight() {
+        dropZone.classList.add('highlight');
+    }
+    
+    function unhighlight() {
+        dropZone.classList.remove('highlight');
+    }
+    
+    // Handle dropped files
+    dropZone.addEventListener('drop', handleDrop, false);
+    
+    function handleDrop(e) {
+        const dt = e.dataTransfer;
+        const files = dt.files;
+        
+        if (files.length > 0) {
+            displayUploadedFiles(files);
+        }
+    }
+}
+
+function changeCalendarView(view) {
+    alert(`Changing to ${view} view... (This feature is not fully implemented in this demo)`);
+}
+</script>
+<script defer>
+    document.addEventListener('DOMContentLoaded', () => {
+        const profileIcon = document.getElementById('profileBtn');
+        const dropdownMenu = document.getElementById('dropdownMenu');
+
+        profileIcon.addEventListener('click', () => {
+            dropdownMenu.style.display = "flex";
+        });
+
+        // Optional: Close dropdown if clicked outside
+        document.addEventListener('click', function (event) {
+            if (!profileIcon.contains(event.target) && !dropdownMenu.contains(event.target)) {
+                dropdownMenu.style.display = "none";
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

@@ -1,59 +1,40 @@
 document.addEventListener("DOMContentLoaded", function () {
+    var modeField = document.getElementById("mode");
     const formTitle = document.getElementById("form-title");
     const toggleText = document.getElementById("toggle-text");
+    const toggleBtn = document.getElementById("toggle-btn");
+    const details = document.getElementById("details");
     const submitBtn = document.querySelector(".btn");
     const form = document.getElementById("auth-form");
-    const emailInput = document.getElementById("email");
-    const passwordInput = document.getElementById("password");
 
     let isLogin = true;
-
-    // Toggle Sign In & Sign Up
     function toggleAuth() {
         isLogin = !isLogin;
-        
-        if (isLogin) {
-            formTitle.textContent = "Sign In";
-            submitBtn.textContent = "Login";
-            toggleText.innerHTML = 'Don\'t have an account? <span id="toggle-btn" class="toggle-link">Sign Up</span>';
-        } else {
-            formTitle.textContent = "Sign Up";
-            submitBtn.textContent = "Register";
-            toggleText.innerHTML = 'Already have an account? <span id="toggle-btn" class="toggle-link">Sign In</span>';
-        }
+        document.body.setAttribute("data-mode", isLogin ? "login" : "signup");
+        modeField.setAttribute('value', isLogin ? 'login' : 'signup');
+        formTitle.textContent = isLogin ? "Sign In" : "Sign Up";
+        submitBtn.textContent = isLogin ? "Login" : "Register";
 
-        // Reattach event listener to the new toggle button
-        document.getElementById("toggle-btn").addEventListener("click", toggleAuth);
+        toggleText.childNodes[0].nodeValue = isLogin
+            ? "Don't have an account? "
+            : "Already have an account? ";
+        toggleBtn.textContent = isLogin ? "Sign Up" : "Sign In";
     }
+    toggleBtn.addEventListener("click", toggleAuth);
 
-    // Attach event listener to toggle button
-    document.getElementById("toggle-btn").addEventListener("click", toggleAuth);
+    // ✅ Form submission
+    form.addEventListener("submit", function (e) {
+        const role = document.querySelector('input[name="role"]:checked');
 
-    // Handle Form Submission
-    form.addEventListener("submit", function (event) {
-        event.preventDefault(); // Prevent default form submission
-
-        const email = emailInput.value.trim().toLowerCase();
-        const password = passwordInput.value.trim();
-
-        if (!email || !password) {
-            alert("Please enter both email and password.");
+        if (!role) {
+            alert("Please select if you are a student or faculty.");
             return;
         }
 
-        if (!email.includes("@")) {
-            alert("Please enter a valid email address.");
-            return;
-        }
-
-        const domain = email.split("@")[1];
-
-        if (domain === "vitstudent.ac.in") {
-            window.location.href = "/student/dashboard/";
-        } else if (domain === "vit.ac.in") {
-            window.location.href = "/faculty/dashboard/";
+        if (role.value === "faculty") {
+            window.location.href = "faculty/dashboard/";
         } else {
-            alert("Invalid email domain. Please use your institutional email.");
+            window.location.href = "student/dashboard/";
         }
     });
 });

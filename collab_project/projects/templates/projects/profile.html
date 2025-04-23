@@ -11,14 +11,24 @@
 </head>
 <body>
     <!-- Navbar -->
-    <nav>
-        <div class="logo">ProjectManager</div>
+    <nav class="navbar">
+        <div class="nav-left">
+            <a href="javascript:history.back()" class="back-btn">
+                <i class="fas fa-arrow-left"></i>
+            </a>
+            <div class="logo">
+                <img src="{% static 'projects/images/logo.png' %}" class="logo-img" alt="Logo">
+            </div>
+        </div>
+    
         <ul class="nav-links">
             <li class="normal-link"><a href="/home/#home">Home</a></li>
             <li class="normal-link"><a href="/home/#about">About</a></li>
             <li class="normal-link"><a href="/home/#services">Services</a></li>
             <li class="normal-link"><a href="/home/#works">How It Works</a></li>
-            <div class="contact-link"><li><a href="/home/#contact" class="contact">Contact</a></li></div>
+            <div class="contact-link">
+                <li><a href="/home/#contact" class="contact">Contact</a></li>
+            </div>
         </ul>
     </nav>
     
@@ -33,32 +43,44 @@
                     </div>
                 </label>
             </div>
-            <h1 id="profileName" class="profile-name">John Doe</h1>
+            <h1 id="profileName" class="profile-name">{{ user.fname }} {{ user.lname }}</h1>
             <button id="editProfile" class="edit-btn">Edit Profile</button>
         </div>
 
-        <div class="profile-details">
-            <div class="detail-item">
-                <strong>Full Name:</strong> 
-                <span id="nameOutput">John Doe</span>
+        <form method="POST">
+            {% csrf_token %}
+            <div class="profile-details">
+                <div class="detail-item editable">
+                    <strong>Username:</strong>
+                    <span class="field-value" id="userDisplay">{{ user.username|default_if_none:"N/A" }}</span>
+                    <input type="text" class="edit-input" name="user" id="userInput" value="{{ user.username|default_if_none:'' }}" style="display: none;">
+                    <i class="fas fa-pencil-alt edit-icon" onclick="enableEdit('user')"></i>
+                </div>
+        
+                <div class="detail-item editable">
+                    <strong>Email:</strong>
+                    <span class="field-value" id="emailDisplay">{{ user.email|default_if_none:"N/A" }}</span>
+                    <input type="text" class="edit-input" name="email" id="emailInput" value="{{ user.email|default_if_none:'' }}" style="display: none;">
+                    <i class="fas fa-pencil-alt edit-icon" onclick="enableEdit('email')"></i>
+                </div>
+                
+                <div class="detail-item editable">
+                    <strong>Mobile:</strong>
+                    <span class="field-value" id="phoneDisplay">{{ user.phone|default_if_none:"N/A" }}</span>
+                    <input type="text" class="edit-input" name="phone" id="phoneInput" value="{{ user.phone|default_if_none:'' }}" style="display: none;">
+                    <i class="fas fa-pencil-alt edit-icon" onclick="enableEdit('phone')"></i>
+                </div>
+                
+                <div class="detail-item editable">
+                    <strong>Address:</strong>
+                    <span class="field-value" id="addressDisplay">{{ user.address|default_if_none:"N/A" }}</span>
+                    <input type="text" class="edit-input" name="address" id="addressInput" value="{{ user.address|default_if_none:'' }}" style="display: none;">
+                    <i class="fas fa-pencil-alt edit-icon" onclick="enableEdit('address')"></i>
+                </div>
+        
+                <button type="submit" class="btn btn-primary edit-btn" style="display: none;" id="saveBtn">Save Changes</button>
             </div>
-            <div class="detail-item">
-                <strong>Email:</strong> 
-                <span id="emailOutput">john.doe@example.com</span>
-            </div>
-            <div class="detail-item">
-                <strong>Phone:</strong> 
-                <span id="phoneOutput">+1 (555) 123-4567</span>
-            </div>
-            <div class="detail-item">
-                <strong>Mobile:</strong> 
-                <span id="mobileOutput">+1 (555) 987-6543</span>
-            </div>
-            <div class="detail-item">
-                <strong>Address:</strong> 
-                <span id="addressOutput">123 Main St, Anytown, USA</span>
-            </div>
-        </div>
+        </form>
 
         <div class="project-contributions-section">
             <h2>Project Contributions</h2>
@@ -101,7 +123,6 @@
                 </div>
             </div>
 
-            <!-- Contribution Breakdown Chart -->
             <div class="contribution-breakdown">
                 <h3>Contribution Breakdown</h3>
                 <div class="contribution-progress">
@@ -179,10 +200,6 @@
             <span class="close-btn">&times;</span>
             <h2>Edit Profile</h2>
             <form id="profileForm">
-                <input type="text" id="fullName" placeholder="Full Name">
-                <input type="email" id="email" placeholder="Email" required>
-                <input type="tel" id="mobile" placeholder="Mobile">
-                <input type="text" id="address" placeholder="Address">
                 <input type="text" id="githubProfile" placeholder="GitHub Profile URL">
                 <input type="text" id="twitterProfile" placeholder="Twitter Profile URL">
                 <input type="text" id="linkedinProfile" placeholder="LinkedIn Profile URL">
@@ -191,5 +208,12 @@
             </form>
         </div>
     </div>
+    <script>
+        function enableEdit(field) {
+            document.getElementById(`${field}Display`).style.display = 'none';
+            document.getElementById(`${field}Input`).style.display = 'inline-block';
+            document.getElementById('saveBtn').style.display = 'inline-block';
+        }
+    </script>
 </body>
 </html>

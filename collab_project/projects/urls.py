@@ -1,21 +1,25 @@
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 from rest_framework.routers import DefaultRouter
-from .views import ProjectViewSet, home, signin, firstscreen, student_dashboard, faculty_dashboard, profile_page
+from .views import ProjectViewSet, home, auth_view, firstscreen
+from . import dashboard_urls
 
 # DRF Router for API endpoints
 router = DefaultRouter()
 router.register(r'projects', ProjectViewSet)
 
+
 urlpatterns = [
     path('', home, name='home'),
-    path('auth/', signin, name='auth'),
+    path('auth/', auth_view, name='auth'),
     path('home/', firstscreen, name='first'),
-    path('student/dashboard/', student_dashboard, name='student_dashboard'),
-    path('home/student/dashboard/', student_dashboard, name='home-student_dashboard'),
-    path('faculty/dashboard/', faculty_dashboard, name='faculty_dashboard'),
-    path('home/faculty/dashboard/', faculty_dashboard, name='home-faculty_dashboard'),
-    path('student/dashboard/profile/', profile_page, name='student_dashboard-profile'),
-    path('home/student/dashboard/profile/', profile_page, name='home-student_dashboard-profile'),
-    path('faculty/dashboard/profile/', profile_page, name='faculty_dashboard-profile'),
-    path('home/faculty/dashboard/profile/', profile_page, name='home-faculty_dashboard-profile'),
+
+    *dashboard_urls.dashboard_patterns,
+
+    path('home/', include((dashboard_urls.dashboard_patterns, 'home'))),
+    path('auth/', include((dashboard_urls.dashboard_patterns, 'auth'))),
 ]
+
+if settings.DEBUG:
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
